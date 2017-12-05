@@ -16,7 +16,7 @@ public class Table {
 
     public void get(String name) {
         getItem();
-        System.out.println(name + " ate a donut.");
+        System.out.println(name + " is making a donut.");
     }
 
 //    private void placeItem(Item i) {

@@ -13,9 +13,14 @@ public class Donut extends Thread{
     static boolean cont = true;
 
     public static void main(String args[]) {
-        if (args.length > 0) {
-            count = Integer.parseInt(args[0]);
-        } else {
+        try {
+            if (args.length > 0 && Integer.parseInt(args[0]) >= 0) {
+                count = Integer.parseInt(args[0]);
+            } else {
+                count = 10;
+            }
+        } catch (NumberFormatException e) {
+            System.err.println(e);
             count = 10;
         }
         Donut donut = new Donut();
@@ -40,10 +45,10 @@ public class Donut extends Thread{
             r = new Random();
         }
         public void run() {
-            System.out.println("test");
             for(int i = 0; i < count; i++) {
                 try {
                     semTable.acquire();
+                    System.out.println("Making donut number " + (i + 1) + " of " + count);
                     Item tempItem[] = randomItem();
                     table.place(tempItem[0], tempItem[1]);
                     semHomer.release();
@@ -52,6 +57,7 @@ public class Donut extends Thread{
                 }
             }
             cont = false;
+            return;
         }
 
         public Item[] randomItem() {
@@ -83,7 +89,7 @@ public class Donut extends Thread{
         }
 
         public void run() {
-            while (cont) {
+             while (cont) {
                 try {
                     semHomer.acquire();
                     if (myItem != table.getItem1() && myItem != table.getItem2()) {
@@ -103,7 +109,7 @@ public class Donut extends Thread{
         private void eatDonut() {
             System.out.println( getName() + " is eating the donut.");
             try {
-                sleep((long) Math.floor(Math.random() * 5));
+                sleep(r.nextInt(5));
             } catch (InterruptedException e) {
                 System.err.println(e);
             }
